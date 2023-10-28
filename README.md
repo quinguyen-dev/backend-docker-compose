@@ -1,6 +1,6 @@
 # Prisma/Postgres/Docker Mini Project
 
-## To run application:
+### To run application:
 
 1. `yarn install`
 2. `yarn run dev`
