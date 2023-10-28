@@ -1,0 +1,18 @@
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-arm64-openssl-1.1.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  userId    Int      @id @default(autoincrement()) @map("user_id")
+  username  String?  @db.VarChar(50) @unique
+  firstName String?  @db.VarChar(50) @map("first_name")
+  lastName  String?  @db.VarChar(50) @map("last_name")
+
+  @@map("user")
+}

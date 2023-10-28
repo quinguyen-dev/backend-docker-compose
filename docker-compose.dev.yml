@@ -1,0 +1,42 @@
+x-port-bindings:
+  BACKEND_PORTS: &backend_ports 3001:3001
+  DATABASE_EXPOSED_PORT: &db_exposed 5434:5432
+
+x-ports: &ports
+  BACKEND_PORT: 3001
+
+x-db-info: &db_info
+  POSTGRES_CONTAINER: &pg-container database
+  POSTGRES_PORT: &pg_port "5432"
+
+x-postgres-args: &db-args
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: password
+  POSTGRES_DB: dev
+
+services:
+  backend:
+    image: prisma-backend
+    container_name: backend
+    ports:
+      - *backend_ports
+    build:
+      context: .
+      target: development
+      args:
+        <<: [*db-args, *db_info, *ports]
+    depends_on:
+      - postgres
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules/
+
+  postgres:
+    container_name: &pg-container
+    image: postgres:latest
+    ports:
+      - *db_exposed
+    expose:
+      - *pg_port
+    environment: *db-args
+    restart: always
